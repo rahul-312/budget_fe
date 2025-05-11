@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { fetchTransactions, createTransaction, fetchCategories } from '../../api';  // Importing necessary functions
-import { useNavigate } from 'react-router-dom';  // Navigation for routing
+import { fetchTransactions, createTransaction, fetchCategories, deleteTransaction } from '../../api'; // Ensure deleteTransaction is imported
+import { useNavigate } from 'react-router-dom';
 
 import './Transactions.css';
 
@@ -17,14 +17,14 @@ const TransactionsPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showList, setShowList] = useState(false);
 
-  // Load transactions and categories on component mount
   useEffect(() => {
     loadTransactions();
     loadCategories();
   }, []);
 
-  // Function to load all transactions
   const loadTransactions = async () => {
     setLoading(true);
     try {
@@ -37,18 +37,15 @@ const TransactionsPage = () => {
     }
   };
 
-  // Function to load categories
   const loadCategories = async () => {
     try {
       const data = await fetchCategories();
-      console.log(data); // Log the categories data to the console
-      setCategories(data);  // Set categories in state
+      setCategories(data);
     } catch (err) {
       setError('Error fetching categories.');
     }
   };
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTransaction({
@@ -57,14 +54,16 @@ const TransactionsPage = () => {
     });
   };
 
-  // Handle form submission to create a new transaction
   const handleCreateTransaction = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSuccessMessage('');
     try {
-      await createTransaction(newTransaction);  // Call the API to create the transaction
-      setNewTransaction({ amount: '', category: '', description: '', date: '' });  // Reset form fields
-      loadTransactions();  // Reload transactions
+      await createTransaction(newTransaction);
+      setSuccessMessage('Transaction created and budget updated!');
+      setNewTransaction({ amount: '', category: '', description: '', date: '' });
+      loadTransactions();
+      setShowList(true);
     } catch (err) {
       setError('Error creating transaction.');
     } finally {
@@ -72,107 +71,143 @@ const TransactionsPage = () => {
     }
   };
 
-  // Rendering the page
+  const handleDeleteTransaction = async (id) => {
+    try {
+      await deleteTransaction(id);
+      setSuccessMessage('Transaction deleted successfully.');
+      loadTransactions(); // Reload transactions after deletion
+    } catch (err) {
+      setError('Error deleting transaction.');
+    }
+  };
+
+  const handleEditTransaction = (id) => {
+    navigate(`/transactions/${id}/edit`);
+  };
+
   return (
     <div className="transactions-container">
       <h1>Transactions</h1>
-
-      {/* Error Message */}
       {error && <p className="error">{error}</p>}
+      {successMessage && <p className="success">{successMessage}</p>}
 
-      {/* Create Transaction Form */}
-      <h2>Create New Transaction</h2>
-      <form onSubmit={handleCreateTransaction}>
-        <div>
-          <label htmlFor="amount">Amount:</label>
-          <input
-            type="number"
-            id="amount"
-            name="amount"
-            value={newTransaction.amount}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
+      {/* Toggle Button */}
+      <button onClick={() => setShowList(!showList)} className="toggle-button">
+        {showList ? 'Add New Transaction' : 'Transactions List'}
+      </button>
 
-        <div>
-          <label htmlFor="category">Category:</label>
-          <select
-            id="category"
-            name="category"
-            value={newTransaction.category}
-            onChange={handleInputChange}
-            required
-            >
-            <option value="">Select a category</option>
-            {categories.map((category) => (
-                <option key={category.value} value={category.value}>
-                {category.label}
-                </option>
-            ))}
-            </select>
-        </div>
-
-        <div>
-          <label htmlFor="description">Description:</label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            value={newTransaction.description}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="date">Date:</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={newTransaction.date}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? 'Creating...' : 'Create Transaction'}
-        </button>
-      </form>
-
-      {/* Transactions List */}
-      <h2>Transaction List</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Amount</th>
-              <th>Category</th>
-              <th>Description</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.length > 0 ? (
-              transactions.map((transaction) => (
-                <tr key={transaction.id}>
-                  <td>{transaction.amount}</td>
-                  <td>{transaction.category_display}</td>
-                  <td>{transaction.description}</td>
-                  <td>{new Date(transaction.date).toLocaleDateString()}</td>
+      {showList ? (
+        <>
+          <h2>Transaction List</h2>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Amount</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Date</th>
+                  <th>Actions</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4">No transactions found.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {transactions.length > 0 ? (
+                  transactions.map((transaction) => (
+                    <tr key={transaction.id}>
+                      <td>{transaction.amount}</td>
+                      <td>{transaction.category_display}</td>
+                      <td>{transaction.description}</td>
+                      <td>{new Date(transaction.date).toLocaleDateString()}</td>
+                      <td>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => handleEditTransaction(transaction.id)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleDeleteTransaction(transaction.id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5">No transactions found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
+        </>
+      ) : (
+        <>
+          <h2>Create New Transaction</h2>
+          <form onSubmit={handleCreateTransaction}>
+            <div>
+              <label htmlFor="amount">Amount:</label>
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                value={newTransaction.amount}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="category">Category:</label>
+              <select
+                id="category"
+                name="category"
+                value={newTransaction.category}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category.value} value={category.value}>
+                    {category.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="description">Description:</label>
+              <input
+                type="text"
+                id="description"
+                name="description"
+                value={newTransaction.description}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="date">Date:</label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={newTransaction.date}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+
+            <button type="submit" disabled={loading}>
+              {loading ? 'Creating...' : 'Create Transaction'}
+            </button>
+          </form>
+        </>
       )}
     </div>
   );

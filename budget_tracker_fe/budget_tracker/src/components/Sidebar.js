@@ -16,15 +16,15 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar">
-      <div className="sidebar-links">
+    <div className="sidebar-container">
+      <div className="sidebar-content">
+        <h3 className="sidebar-heading">Finance Section</h3>
         <ul>
-          <li><Link to="/dashboard">Dashboard</Link></li>
           <li><Link to="/transactions">Transactions</Link></li>
           <li><Link to="/budgets">Budgets</Link></li>
         </ul>
       </div>
-      <div className="sidebar-logout">
+      <div className="sidebar-footer">
         <button onClick={handleLogout}>Logout</button>
       </div>
     </div>

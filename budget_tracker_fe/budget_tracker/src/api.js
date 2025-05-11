@@ -14,8 +14,11 @@ export const API = {
 
   // Budgets
   BUDGETS: `${BASE_URL}budget/budget/`,
+  BUDGET_SUMMARY: `${BASE_URL}budget/budget-summary/`,
 
   CATEGORIES: `${BASE_URL}budget/categories/`,
+  SPENDING_BY_CATEGORY : `${BASE_URL}budget/spending-by-category/`,
+  TOTAL_EXPENSES_OVER_TIME: `${BASE_URL}budget/total-expenses-over-time/`,
 };
 
 // Axios instance configuration
@@ -123,6 +126,15 @@ export const updateTransaction = async (id, data) => {
   }
 };
 
+export const fetchTransactionById = async (id) => {
+  try {
+    const response = await api.get(`${API.TRANSACTIONS}${id}/`, { headers: getAuthHeaders() });
+    return response.data;
+  } catch (error) {
+    throw new Error('Error fetching transaction details');
+  }
+};
+
 export const deleteTransaction = async (id) => {
   try {
     const response = await api.delete(`${API.TRANSACTIONS}${id}/`, { headers: getAuthHeaders() });
@@ -185,6 +197,38 @@ export const fetchCategories = async () => {
     return response.data;  // Return the data from the categories endpoint
   } catch (error) {
     console.error('Fetching categories failed:', error?.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const fetchBudgetSummary = async () => {
+  try {
+    const response = await api.get(API.BUDGET_SUMMARY, { headers: getAuthHeaders() });
+    return response.data;
+  } catch (error) {
+    console.error('Fetching budget summary failed:', error?.response?.data || error.message);
+    throw error;
+  }
+};
+
+
+export const fetchSpendingByCategory = async () => {
+  try {
+    const response = await api.get(API.SPENDING_BY_CATEGORY, { headers: getAuthHeaders() });
+    return response.data;  // The data can be used directly for the pie chart
+  } catch (error) {
+    console.error('Fetching spending by category failed:', error?.response?.data || error.message);
+    throw error;
+  }
+};
+
+
+export const fetchTotalExpensesOverTime = async () => {
+  try {
+    const response = await api.get(API.TOTAL_EXPENSES_OVER_TIME, { headers: getAuthHeaders() });
+    return response.data;  // Return the data for total expenses over time
+  } catch (error) {
+    console.error('Fetching total expenses over time failed:', error?.response?.data || error.message);
     throw error;
   }
 };

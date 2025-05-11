@@ -1,10 +1,9 @@
-// src/components/Footer.js
 import React from "react";
-import "../styles/Footer.css"; // Import footer CSS from the styles folder
+import "../styles/Footer.css";
 
 const Footer = () => {
   return (
-    <footer className="footer">
+    <footer className="footer-wrapper">
       <div className="footer-container">
         <p>&copy; {new Date().getFullYear()} Your Company Name. All rights reserved.</p>
         <ul className="footer-links">
