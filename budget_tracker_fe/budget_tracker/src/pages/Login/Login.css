@@ -1,20 +1,11 @@
 /* Login.css */
 
-.login-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* full viewport height */
-  background-color: #f5f5f5; /* optional background */
-}
-
 
 .login-page {
   display: flex;
-  height: 60vh;
-  width: 50%;
+  height: 70vh;
+  width: 100%;
   margin: 4rem auto;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   border-radius: 12px;
   overflow: hidden;
@@ -103,7 +94,7 @@
 
 .signup-link{
   text-align: center;
-  margin-top: 0rem;
+  margin-top: 1rem;
   font-size: 0.9rem;
 }
 .forgot-password-link {
@@ -124,6 +115,12 @@
   text-decoration: underline;
 }
 
+
+.login-form {
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
 /* Responsive */
 @media (max-width: 768px) {
   .login-page {

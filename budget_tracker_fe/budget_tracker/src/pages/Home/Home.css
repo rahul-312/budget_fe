@@ -4,10 +4,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f0f4f8;
-  padding: 20px;
-  box-sizing: border-box;
 }
 
 .home-content {
@@ -21,17 +17,17 @@
 
 .home-title {
   font-size: 2.5rem;
-  color: #333;
+  color: #000000;
   margin-bottom: 20px;
 }
 
 .home-description {
   font-size: 1.2rem;
-  color: #555;
+  color: #000000;
   margin-bottom: 15px;
 }
 
 .home-note {
   font-size: 1rem;
-  color: #777;
+  color: #353535;
 }

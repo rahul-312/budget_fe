@@ -98,7 +98,7 @@ const Login = () => {
           {displayedText}
         </h1>
         <h2>Login to your account</h2>
-        <form onSubmit={handleLogin}>
+        <form className="login-form" onSubmit={handleLogin}>
           <input
             type="email"
             name="email"
@@ -121,10 +121,6 @@ const Login = () => {
         </form>
 
         {error && <p className="error-msg">{error}</p>}
-
-        <p className="forgot-password-link">
-          <Link to="/forgot-password">Forgot Password?</Link>
-        </p>
         <p className="signup-link">
           Don't have an account? <Link to="/register">Create Account</Link>
         </p>
