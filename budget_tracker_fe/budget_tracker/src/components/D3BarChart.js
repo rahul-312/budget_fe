@@ -18,6 +18,7 @@ const D3BarChart = ({ data, width, height }) => {
 
     if (!cleanedData.length) return;
 
+    // Clear previous chart
     d3.select(ref.current).selectAll('*').remove();
 
     const svg = d3.select(ref.current)
@@ -62,15 +63,18 @@ const D3BarChart = ({ data, width, height }) => {
       .style('font-size', '12px')
       .style('fill', '#333');
 
-    // Bars
+    // Bars (thinner and centered)
+    const barWidthFactor = 0.4;
+    const barOffsetFactor = (1 - barWidthFactor) / 2;
+
     g.selectAll('.bar')
       .data(cleanedData)
       .enter()
       .append('rect')
       .attr('class', 'bar')
-      .attr('x', d => x(d.date))
+      .attr('x', d => x(d.date) + x.bandwidth() * barOffsetFactor)
       .attr('y', d => y(d.value))
-      .attr('width', x.bandwidth())
+      .attr('width', x.bandwidth() * barWidthFactor)
       .attr('height', d => innerHeight - y(d.value))
       .attr('fill', '#4f46e5');
 

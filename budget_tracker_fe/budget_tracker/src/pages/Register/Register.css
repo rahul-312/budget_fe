@@ -1,194 +1,115 @@
-/* src/pages/Register/Register.css */
+/* Register.css */
 
-/* Fixed container wrapper to remain between navbar and footer */
 .container-wrapper {
-  position: fixed;
-  top: 70px;
-  bottom: 60px;
-  left: 0;
-  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
-  overflow-y: auto;
-  padding: 1rem;
-  scrollbar-width: none;
-}
-.container-wrapper::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-/* Registration form container styling */
-.register-container {
-  position: fixed;
-  background: #ffffff;
-  padding: 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 550px;
-  height: 80%;
-  margin-bottom: 3%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 60%;
+  min-height: 100vh;
+  padding: 20px;
 }
 
-/* Heading */
+.register-container {
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+}
+
 .register-container h2 {
   text-align: center;
-  margin-top: 1rem;
-  font-size: 2rem;
-  color: #2c3e50;
-  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
 }
 
-/* Row styling to display fields */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .form-row {
   display: flex;
-  gap: 1.2rem;
-  margin-bottom: 1.2rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 15px;
 }
 
-/* Input and select styling */
-.form-row input,
-.form-row select {
-  flex: 1;
-  padding: 0.85rem 1rem;
+@media (min-width: 600px) {
+  .form-row {
+    flex-direction: row;
+    gap: 20px;
+  }
+}
+
+input,
+select {
+  padding: 10px 15px;
+  font-size: 14px;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  min-width: 0;
-  background: #fdfdfd;
+  border-radius: 8px;
+  flex: 1;
+  background-color: #f9f9f9;
 }
 
-.form-row input:focus,
-.form-row select:focus {
+input:focus,
+select:focus {
   outline: none;
-  border-color: #4a90e2;
-  box-shadow: 0 0 6px rgba(74, 144, 226, 0.3);
+  border-color: #007bff;
+  background-color: #fff;
 }
 
-/* Profile picture input styling */
-.form-row input[type="file"] {
-  padding: 0.5rem;
+button {
+  padding: 12px 15px;
+  background-color: #007bff;
   border: none;
-  background: #f4f4f4;
-  cursor: pointer;
-}
-
-.form-row .file-name {
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 0.5rem;
-  word-break: break-word;
-}
-
-/* Custom file input wrapper */
-.file-input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex: 1;
-}
-
-.file-input-wrapper input[type="file"] {
-  width: 100%;
-  opacity: 0;
-  position: absolute;
-  cursor: pointer;
-}
-
-.file-input-wrapper .custom-file-label {
-  padding: 0.85rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #fff;
-  width: 100%;
-  text-align: center;
-  color: #666;
-  cursor: pointer;
-  transition: border-color 0.2s ease;
-}
-
-.file-input-wrapper input[type="file"]:focus + .custom-file-label {
-  border-color: #4a90e2;
-  box-shadow: 0 0 6px rgba(74, 144, 226, 0.3);
-}
-
-/* Submit button styling */
-.register-container button {
-  width: 100%;
-  padding: 0.9rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  background: #4a90e2;
+  border-radius: 8px;
   color: #fff;
   font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s ease;
-  /* margin-top: 1rem; */
+  transition: background-color 0.3s ease;
 }
 
-.register-container button:hover {
-  background: #3a7bd5;
+button:hover {
+  background-color: #0056b3;
 }
 
-.register-container button:disabled {
-  background: #b0c4de;
-  cursor: not-allowed;
-  opacity: 0.8;
+.file-name {
+  font-size: 13px;
+  color: #666;
+  margin-top: 5px;
 }
 
-/* Message styling */
 .error-msg {
-  text-align: center;
-  color: #e74c3c;
-  margin-top: 1rem;
-  font-size: 0.95rem;
+  color: #d9534f;
+  background-color: #fbeaea;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 14px;
 }
 
 .success-msg {
-  text-align: center;
-  color: #27ae60;
-  margin-top: 1rem;
-  font-size: 0.95rem;
+  color: #28a745;
+  background-color: #e8f5ea;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 14px;
 }
 
-/* Login link styling */
 .login-link {
+  margin-top: 20px;
+  font-size: 14px;
   text-align: center;
-  margin-top: 1rem;
-  font-size: 0.95rem;
 }
 
 .login-link a {
-  color: #2c3e50;
+  color: #007bff;
   text-decoration: none;
-  font-weight: bold;
 }
 
 .login-link a:hover {
   text-decoration: underline;
-}
-
-/* Responsive design */
-@media (max-width: 600px) {
-  .register-container {
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .form-row {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-
-  .register-container h2 {
-    font-size: 1.6rem;
-  }
 }

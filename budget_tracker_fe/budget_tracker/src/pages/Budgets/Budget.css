@@ -1,98 +1,113 @@
 .budgets-container {
-    max-width: 800px;
-    margin: 40px auto;
-    margin-top: 10%;
-    padding: 20px;
-    background: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    font-family: 'Segoe UI', sans-serif;
-  }
-  
-  .budgets-title {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333;
-    font-size: 28px;
-  }
-  
-  .budget-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 30px;
-  }
-  
-  .budget-input {
-    width: auto;
-    padding: 12px 16px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    transition: border 0.3s;
-  }
-  
-  .budget-input:focus {
-    border-color: #007BFF;
-    outline: none;
-  }
-  
-  .budget-button {
-    padding: 12px 16px;
-    font-size: 16px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .budget-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .budget-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .budget-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #f9f9f9;
-    padding: 12px 16px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-  }
-  
-  .budget-edit-button,
-  .budget-delete-button {
-    padding: 6px 12px;
-    font-size: 14px;
-    margin-left: 10px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .budget-edit-button {
-    background-color: #ffc107;
-    color: #333;
-  }
-  
-  .budget-edit-button:hover {
-    background-color: #e0a800;
-  }
-  
-  .budget-delete-button {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  .budget-delete-button:hover {
-    background-color: #c82333;
-  }
-  
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.budgets-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.toggle-button {
+  width: auto;
+  margin-bottom: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.toggle-button:hover {
+  background-color: #0056b3;
+}
+
+.budget-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.budget-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.budget-button {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.budget-button:hover {
+  background-color: #218838;
+}
+
+.budget-table-wrapper {
+  overflow-x: auto;
+}
+
+.budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.budget-table th,
+.budget-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.budget-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.action-col {
+  text-align: right;
+  width: 150px;
+}
+
+.action-buttons {
+  text-align: right;
+}
+
+.budget-edit-button,
+.budget-delete-button {
+  font-size: 12px;
+  padding: 4px 8px;
+  margin-left: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+
+.budget-edit-button {
+  background-color: #ffc107;
+}
+
+.budget-edit-button:hover {
+  background-color: #e0a800;
+}
+
+.budget-delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.budget-delete-button:hover {
+  background-color: #c82333;
+}

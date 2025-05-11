@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { fetchBudgets, createBudget, updateBudget, deleteBudget } from '../../api';
-import DatePicker from 'react-datepicker';  // Import react-datepicker
-import SweetAlert from 'sweetalert2'; // Import SweetAlert
-import 'react-datepicker/dist/react-datepicker.css'; // Import CSS for react-datepicker
+import DatePicker from 'react-datepicker';
+import SweetAlert from 'sweetalert2';
+import 'react-datepicker/dist/react-datepicker.css';
 import './Budget.css';
 
 const Budgets = () => {
   const [budgets, setBudgets] = useState([]);
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(null);
+  const [showList, setShowList] = useState(false); // Toggle state
 
   const loadBudgets = async () => {
     try {
@@ -26,7 +27,6 @@ const Budgets = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure amount and date are selected
     if (!amount || !date) {
       SweetAlert.fire({
         icon: 'warning',
@@ -36,7 +36,7 @@ const Budgets = () => {
       return;
     }
 
-    const month = date.getMonth() + 1; 
+    const month = date.getMonth() + 1;
     const year = date.getFullYear();
 
     try {
@@ -71,11 +71,11 @@ const Budgets = () => {
         if (!value) return 'Amount is required!';
         if (isNaN(value) || value <= 0) return 'Please enter a valid positive number!';
         return null;
-      }
+      },
     });
-  
+
     if (!newAmount) return;
-  
+
     try {
       await updateBudget(budgetId, { amount: newAmount });
       SweetAlert.fire({
@@ -130,38 +130,75 @@ const Budgets = () => {
   return (
     <div className="budgets-container">
       <h2 className="budgets-title">Budgets</h2>
-      <form className="budget-form" onSubmit={handleSubmit}>
-        <input
-          className="budget-input"
-          type="number"
-          placeholder="Amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          required
-        />
-        {/* Date Picker */}
-        <div >
-            Date : 
+
+      {/* Toggle Button */}
+      <button
+        className="toggle-button"
+        onClick={() => setShowList(!showList)}
+      >
+        {showList ? 'Add Budget' : 'Budget List'}
+      </button>
+
+      {/* Budget Form */}
+      {!showList && (
+        <form className="budget-form" onSubmit={handleSubmit}>
+          <input
+            className="budget-input"
+            type="number"
+            placeholder="Amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            required
+          />
+          <label>Date:</label>
+          <DatePicker
+            className="budget-input"
+            selected={date}
+            onChange={(date) => setDate(date)}
+            dateFormat="MM/yyyy"
+            showMonthYearPicker
+            required
+          />
+          <button type="submit" className="budget-button">Add Budget</button>
+        </form>
+      )}
+
+      {/* Budget List */}
+      {showList && (
+        <div className="budget-table-wrapper">
+          <table className="budget-table">
+            <thead>
+              <tr>
+                <th>Budget</th>
+                <th>Month/Year</th>
+                <th className="action-col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {budgets.map((budget) => (
+                <tr key={budget.id}>
+                  <td>{budget.amount}</td>
+                  <td>{budget.month}/{budget.year}</td>
+                  <td className="action-buttons">
+                    <button
+                      className="budget-edit-button"
+                      onClick={() => handleUpdate(budget.id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="budget-delete-button"
+                      onClick={() => handleDelete(budget.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <DatePicker
-          className="budget-input"
-          selected={date}
-          onChange={(date) => setDate(date)}
-          dateFormat="MM/yyyy"
-          showMonthYearPicker
-          required
-        />
-        <button type="submit" className="budget-button">Add Budget</button>
-      </form>
-      <ul className="budget-list">
-        {budgets.map((budget) => (
-          <li className="budget-item" key={budget.id}>
-            <span>{budget.amount} - {budget.month}/{budget.year}</span>
-            <button className="budget-edit-button" onClick={() => handleUpdate(budget.id)}>Edit</button>
-            <button className="budget-delete-button" onClick={() => handleDelete(budget.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      )}
     </div>
   );
 };

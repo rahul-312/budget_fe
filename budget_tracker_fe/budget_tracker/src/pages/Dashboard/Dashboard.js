@@ -59,23 +59,26 @@ const Dashboard = () => {
 
       <h1>Dashboard</h1>
 
-      <div className="pie-chart-box">
-        <h3>Spending by Category</h3>
-        {categoryData.length ? (
-          <D3PieChart data={categoryData} width={400} height={400} />
-        ) : (
-          <p>No spending data available</p>
-        )}
-      </div>
+<div className="chart-container">
+  <div className="pie-chart-box">
+    <h3>Spending by Category</h3>
+    {categoryData.length ? (
+      <D3PieChart data={categoryData} width={400} height={400} />
+    ) : (
+      <p>No spending data available</p>
+    )}
+  </div>
 
-      <div className="line-chart-box">
-        <h3>Total Expenses Over Time</h3>
-        {expensesData.length ? (
-          <D3BarChart data={expensesData} width={600} height={400} />
-        ) : (
-          <p>No expense data available</p>
-        )}
-      </div>
+  <div className="line-chart-box">
+    <h3>Total Expenses Over Time</h3>
+    {expensesData.length ? (
+      <D3BarChart data={expensesData} width={600} height={400} />
+    ) : (
+      <p>No expense data available</p>
+    )}
+  </div>
+</div>
+
     </div>
   );
 };

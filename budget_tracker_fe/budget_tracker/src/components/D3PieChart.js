@@ -8,7 +8,7 @@ const D3PieChart = ({ data, width, height }) => {
     // Clear previous chart
     d3.select(ref.current).selectAll('*').remove();
 
-    const radius = Math.min(width, height) / 2;
+    const radius = Math.min(width, height) / 2.5;
 
     const svg = d3
       .select(ref.current)
