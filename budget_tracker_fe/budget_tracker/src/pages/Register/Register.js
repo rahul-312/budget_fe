@@ -1,192 +1,111 @@
-// src/pages/Register/Register.js
-import { useState } from "react";
-import { API } from "../../api";
-import { Link } from "react-router-dom";
-import "./Register.css";
+/* Register.css */
 
-const Register = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    phone_number: "",
-    first_name: "",
-    last_name: "",
-    gender: "",
-    password: "",
-    confirm_password: "",
-    profile_picture: null,
-  });
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+.container-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+.register-container {
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+}
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-      const maxSize = 5 * 1024 * 1024; // 5MB
+.register-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
 
-      if (!validTypes.includes(file.type)) {
-        setError("Please upload a valid image file (JPEG, PNG, or JPG)");
-        setFormData({ ...formData, profile_picture: null });
-        return;
-      }
-      if (file.size > maxSize) {
-        setError("Image size must be less than 5MB");
-        setFormData({ ...formData, profile_picture: null });
-        return;
-      }
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-      setError("");
-      setFormData({ ...formData, profile_picture: file });
-    }
-  };
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (formData.password !== formData.confirm_password) {
-      setError(["Passwords do not match."]); // Now making error an array
-      setMessage("");
-      return;
-    }
-  
-    const formPayload = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key !== 'confirm_password' && value !== null) {
-        formPayload.append(key, value);
-      }
-    });
-  
-    try {
-      const response = await fetch(API.REGISTER, {
-        method: "POST",
-        body: formPayload,
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setMessage("Registration successful!");
-        setError([]);
-      } else {
-        // Handle multiple field errors
-        const errors = [];
-        if (data) {
-          for (const key in data) {
-            if (Array.isArray(data[key])) {
-              errors.push(...data[key]); // collect all error messages
-            } else if (typeof data[key] === 'string') {
-              errors.push(data[key]);
-            }
-          }
-        }
-        setError(errors.length ? errors : ["Registration failed. Please try again."]);
-        setMessage("");
-      }
-    } catch (err) {
-      setError(["Something went wrong. Please try again."]);
-      setMessage("");
-    }
-  };
+@media (min-width: 600px) {
+  .form-row {
+    flex-direction: row;
+    gap: 20px;
+  }
+}
 
-  return (
-    <div className="container-wrapper">
-      <div className="register-container">
-        <h2>Register</h2>
-        <form onSubmit={handleRegister}>
-          <div className="form-row">
-            <input
-              type="email"
-              name="email"
-              placeholder="Email (Gmail)"
-              value={formData.email}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="phone_number"
-              placeholder="Phone Number"
-              value={formData.phone_number}
-              onChange={handleChange}
-            />
-          </div>
+input,
+select {
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  flex: 1;
+  background-color: #f9f9f9;
+}
 
-          <div className="form-row">
-            <input
-              type="text"
-              name="first_name"
-              placeholder="First Name"
-              value={formData.first_name}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="last_name"
-              placeholder="Last Name"
-              value={formData.last_name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  background-color: #fff;
+}
 
-          <div className="form-row">
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              required
-            >
-              <option value="" disabled>Select Gender</option>
-              <option value="MALE">Male</option>
-              <option value="FEMALE">Female</option>
-              <option value="OTHER">Other</option>
-            </select>
+button {
+  padding: 12px 15px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-            <input
-              type="file"
-              name="profile_picture"
-              onChange={handleFileChange}
-              accept="image/jpeg,image/png,image/jpg"
-            />
-            {formData.profile_picture && (
-              <span className="file-name">
-                {formData.profile_picture.name}
-              </span>
-            )}
-          </div>
+.file-name {
+  font-size: 13px;
+  color: #666;
+  margin-top: 5px;
+}
 
-          <div className="form-row">
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="password"
-              name="confirm_password"
-              placeholder="Confirm Password"
-              value={formData.confirm_password}
-              onChange={handleChange}
-              required
-            />
-          </div>
+.error-msg {
+  color: #d9534f;
+  background-color: #fbeaea;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 14px;
+}
 
-          <button type="submit">Register</button>
-        </form>
+.success-msg {
+  color: #28a745;
+  background-color: #e8f5ea;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 14px;
+}
 
-        {error && <p className="error-msg">{error}</p>}
-        {message && <p className="success-msg">{message}</p>}
+.login-link {
+  margin-top: 20px;
+  font-size: 14px;
+  text-align: center;
+}
 
-        <p className="login-link text-center">
-          Have an account? <Link to="/login">Log in</Link>
-        </p>
-      </div>
-    </div>
-  );
-};
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
 
-export default Register;
+.login-link a:hover {
+  text-decoration: underline;
+}
