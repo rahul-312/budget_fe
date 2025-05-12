@@ -131,15 +131,10 @@ const Budgets = () => {
     <div className="budgets-container">
       <h2 className="budgets-title">Budgets</h2>
 
-      {/* Toggle Button */}
-      <button
-        className="toggle-button"
-        onClick={() => setShowList(!showList)}
-      >
+      <button className="toggle-button" onClick={() => setShowList(!showList)}>
         {showList ? 'Add Budget' : 'Budget List'}
       </button>
 
-      {/* Budget Form */}
       {!showList && (
         <form className="budget-form" onSubmit={handleSubmit}>
           <input
@@ -163,7 +158,6 @@ const Budgets = () => {
         </form>
       )}
 
-      {/* Budget List */}
       {showList && (
         <div className="budget-table-wrapper">
           <table className="budget-table">
@@ -171,7 +165,7 @@ const Budgets = () => {
               <tr>
                 <th>Budget</th>
                 <th>Month/Year</th>
-                <th className="action-col">Action</th>
+                <th className="action-col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -181,16 +175,18 @@ const Budgets = () => {
                   <td>{budget.month}/{budget.year}</td>
                   <td className="action-buttons">
                     <button
-                      className="budget-edit-button"
+                      className="icon-button edit"
                       onClick={() => handleUpdate(budget.id)}
+                      title="Edit"
                     >
-                      Edit
+                      <i className="fa fa-pencil" aria-hidden="true"></i>
                     </button>
                     <button
-                      className="budget-delete-button"
+                      className="icon-button delete"
                       onClick={() => handleDelete(budget.id)}
+                      title="Delete"
                     >
-                      Delete
+                      <i className="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
                 </tr>
