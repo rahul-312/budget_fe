@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { fetchTransactions, createTransaction, fetchCategories, deleteTransaction } from '../../api'; // Ensure deleteTransaction is imported
+import {
+  fetchTransactions,
+  createTransaction,
+  fetchCategories,
+  deleteTransaction
+} from '../../api';
 import { useNavigate } from 'react-router-dom';
-
+import SweetAlert from 'sweetalert2';
 import './Transactions.css';
 
 const TransactionsPage = () => {
@@ -16,8 +21,6 @@ const TransactionsPage = () => {
     date: '',
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const [showList, setShowList] = useState(false);
 
   useEffect(() => {
@@ -31,7 +34,11 @@ const TransactionsPage = () => {
       const data = await fetchTransactions();
       setTransactions(data);
     } catch (err) {
-      setError('Error fetching transactions.');
+      SweetAlert.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error fetching transactions.',
+      });
     } finally {
       setLoading(false);
     }
@@ -42,7 +49,11 @@ const TransactionsPage = () => {
       const data = await fetchCategories();
       setCategories(data);
     } catch (err) {
-      setError('Error fetching categories.');
+      SweetAlert.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error fetching categories.',
+      });
     }
   };
 
@@ -57,27 +68,54 @@ const TransactionsPage = () => {
   const handleCreateTransaction = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setSuccessMessage('');
     try {
       await createTransaction(newTransaction);
-      setSuccessMessage('Transaction created and budget updated!');
+      SweetAlert.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Transaction created and budget updated!',
+      });
       setNewTransaction({ amount: '', category: '', description: '', date: '' });
       loadTransactions();
       setShowList(true);
     } catch (err) {
-      setError('Error creating transaction.');
+      SweetAlert.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error creating transaction.',
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteTransaction = async (id) => {
-    try {
-      await deleteTransaction(id);
-      setSuccessMessage('Transaction deleted successfully.');
-      loadTransactions(); // Reload transactions after deletion
-    } catch (err) {
-      setError('Error deleting transaction.');
+    const result = await SweetAlert.fire({
+      title: 'Are you sure?',
+      text: 'This transaction will be permanently deleted.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await deleteTransaction(id);
+        SweetAlert.fire({
+          icon: 'success',
+          title: 'Deleted',
+          text: 'Transaction deleted successfully.',
+        });
+        loadTransactions();
+      } catch (err) {
+        SweetAlert.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error deleting transaction.',
+        });
+      }
     }
   };
 
@@ -88,10 +126,7 @@ const TransactionsPage = () => {
   return (
     <div className="transactions-container">
       <h1>Transactions</h1>
-      {error && <p className="error">{error}</p>}
-      {successMessage && <p className="success">{successMessage}</p>}
 
-      {/* Toggle Button */}
       <button onClick={() => setShowList(!showList)} className="toggle-button">
         {showList ? 'Add New Transaction' : 'Transactions List'}
       </button>
@@ -122,16 +157,18 @@ const TransactionsPage = () => {
                       <td>{new Date(transaction.date).toLocaleDateString()}</td>
                       <td>
                         <button
-                          className="btn btn-primary"
+                          className="icon-button edit"
                           onClick={() => handleEditTransaction(transaction.id)}
+                          title="Edit"
                         >
-                          Edit
+                          <i className="fa fa-pencil" aria-hidden="true"></i>
                         </button>
                         <button
-                          className="btn btn-danger"
+                          className="icon-button delete"
                           onClick={() => handleDeleteTransaction(transaction.id)}
+                          title="Delete"
                         >
-                          Delete
+                          <i className="fa fa-trash" aria-hidden="true"></i>
                         </button>
                       </td>
                     </tr>
